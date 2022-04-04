@@ -1,0 +1,168 @@
+.editor{
+    width: 100%;
+    height: 100%;
+    &-left, &-right{
+        position: absolute;
+        background-color: bisque;
+        top: 0;
+        bottom: 0;
+    }
+    &-left{
+        left: 0;
+        width: 270px;
+        overflow: auto;
+        &-item{
+            width: 250px;
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ccc;
+            padding: 30px;
+            box-sizing: border-box;
+            cursor: move;
+            user-select: none;
+            min-height: 100px;
+            position: relative;
+            .DBlock{
+                width: 100%;
+            }
+            >span{
+                position: absolute;
+                top: 0;
+                left: 0;
+                background-color:rgb(90, 205, 224);
+                color: white;
+            }
+            &::after{
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                opacity: 0.2;
+            }
+        }
+    }
+    &-right{
+        right: 0;
+        width: 320px;
+    }
+    &-top{
+        right: 340px;
+        left: 280px;
+        position: absolute;
+        height: 80px;
+        background-color: burlywood;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &-button{
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba( 0, 0, 0, .3);
+            color: #fff;
+            user-select: none;
+            cursor: pointer;
+            &*{
+                margin-left: 3PX;
+            }
+
+        }
+    }
+    &-container{
+        padding: 80px 320px 0 270px;
+        height: 100%;
+        box-sizing: border-box;
+        &-canvas{
+            overflow: scroll;
+            height: 100%;
+            &__content{
+                position: relative;
+                // width: 550px;
+                // height: 550px;
+                margin: 20px auto;
+                // background-color: yellow;
+            }
+        }
+    }
+}
+.editor-block{
+    // ::after加上后 dropenter方法的e.target获取不准确
+    // &::after{
+    //     content: '';
+    //     position: absolute;
+    //     top: 0;
+    //     left: 0;
+    //     right: 0;
+    //     bottom: 0;
+    // }
+}
+// .editor-block-focus::after{
+//     content: '';
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     right: 0;
+//     bottom: 0;
+//     border: 3px solid #b2b7f7;
+// }
+.editor-block-focus{
+    // content: '';
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+    // right: 0;
+    // bottom: 0;
+    border: 3px solid #b2b7f7;
+}
+#editor-block-focus{
+    position:absolute;
+	top:50px;
+	width:800px;
+	height:300px;
+    border: 1px solid rgb(70, 128, 255);
+	filter:alpha(Opacity=80);-moz-opacity:0.2;opacity: 0.8;z-index:100; background-color:#fff;
+	display:none;
+    .editor-block-focus-tools{
+        position: absolute;
+        top: -35px;
+        right: 0px;
+    }
+}
+.line-x{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-left: 2px dashed red;
+}
+.line-y{
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 2px dashed red;
+}
+.positionLine-stickyTop{
+    margin-top: 10px;
+    height: 30px;
+    background-color: #79bbff;
+    border-top: 6px solid #409EFF;
+}
+.positionLine{
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background-color: #79bbff;
+    border-top: 6px solid #409EFF;
+}
+.setting-block{
+    padding: 16px;
+    background-color: #fff;
+}

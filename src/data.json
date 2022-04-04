@@ -1,0 +1,52 @@
+{
+    "container": {
+        "width": 550,
+        "height": 550,
+        "backgroundColor": "#b3f3d3",
+        "position": "relative"
+    },
+    "id":"container",
+    "blocks": [{
+            "id": "12345",
+            "parentId": "container",
+            "top": 300,
+            "left": 300,
+            "zIndex": 1,
+            "key": "block",
+            "name": "区块容器1",
+            "position": "relative",
+            "blocks": [{
+                    "id": "123456",
+                    "parentId": "12345",
+                    "top": 200,
+                    "left": 200,
+                    "zIndex": 1,
+                    "key": "input",
+                    "name": "输入框",
+                    "position": "relative"
+                },
+                {
+                    "id": "1234567",
+                    "parentId": "12345",
+                    "top": 200,
+                    "left": 200,
+                    "zIndex": 1,
+                    "key": "text",
+                    "name": "文本",
+                    "position": "relative"
+                }
+            ]
+        },
+        {
+            "id": "1234567890",
+            "parentId": "container",
+            "top": 200,
+            "left": 200,
+            "zIndex": 1,
+            "key": "block",
+            "name": "区块容器2",
+            "position": "relative",
+            "blocks": []
+        }
+    ]
+}
