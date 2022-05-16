@@ -4,7 +4,6 @@
 
 <script>
 import { ElButton } from 'element-plus'
-
 export default {
   name:'DButton',
   components:{
@@ -17,7 +16,7 @@ export default {
       }
   },
   setup(props){
-    console.log('props: ', props);
+    // console.log('props: ', props);
 
   }
 }

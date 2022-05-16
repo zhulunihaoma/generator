@@ -3,13 +3,12 @@ import { reactive } from "vue";
 import { insertAfter } from '../utils/domUtils';
 import { repeatBlocks, exchangeBlock } from '../utils/componentsOperate'
 const imgsrc = require('../assets/images/pikachu.png');
-const elementClass = ['DSelect','DButton', 'DText', 'DInput'];
+const elementClass = ['DSelect','DButton', 'DText', 'DInput', 'el-input__inner'];
 const containerClass = ['DBlock','editor-container-canvas__content']
 export const componentDragger = (containerRef, data)=>{
     let currentComponent = reactive();
         const dragenter = (e)=>{
             e.dataTransfer.dropEffect = 'move';
-            console.log('dragenter-e: ', e.target);
             setTimeout(() => {
                 if (containerClass.indexOf(e.target.className) > -1) {
                     const positionDomArr = document.getElementsByClassName('positionLine-stickyTop')
@@ -33,13 +32,14 @@ export const componentDragger = (containerRef, data)=>{
             }, 50);
         };
         const dragover = (e)=>{
+            // console.log('dragover.classList: ', e.target.classList);
             setTimeout(() => {
                 if(elementClass.indexOf(e.target.classList[e.target.classList.length -1]) > -1){
                     const positionDiv = document.createElement('div');
                     positionDiv.classList.add('positionLine-stickyTop');
                     const positionDomPre = e.target.parentNode.parentNode.getElementsByClassName('positionLine-stickyTop');
                     const offsetY =  e.offsetY;
-                    console.log('dragover: ', e.target.classList);
+                    // console.log('dragover: ', e.target.classList);
                     if(positionDomPre.length){
                         positionDomPre[0].remove();
                     }
@@ -60,8 +60,6 @@ export const componentDragger = (containerRef, data)=>{
         };
         const dragleave = (e)=>{
             e.dataTransfer.dropEffect = 'none';
-            console.log('dragleave,relatedTarget: ', e.relatedTarget.classList);
-            console.log('dragleave,target: ', e.target.classList);
             if ((containerClass.indexOf(e.target.className)> -1 && !e.relatedTarget.classList.contains('positionLine-stickyTop')) || e.relatedTarget.className === 'editor-container-canvas') {
                 setTimeout(() => {
                     const positionDom = document.getElementsByClassName('positionLine-stickyTop')
@@ -72,7 +70,7 @@ export const componentDragger = (containerRef, data)=>{
               }
         };
         const drop = (e)=>{
-            console.log('drop-e: ', e.target.className);
+            // console.log('拖拽画布内的组件drop-e: ', e.target.className);
             // 阻止默认动作（如打开一些元素的链接）
             e.preventDefault();
             setTimeout(() => {
@@ -117,7 +115,7 @@ export const componentDragger = (containerRef, data)=>{
             containerRef.value.removeEventListener('dragenter', dragenter);
             containerRef.value.removeEventListener('dragover', dragover)
             containerRef.value.removeEventListener('dragleave', dragleave)
-            // containerRef.value.removeEventListener('drop', drop);
+            containerRef.value.removeEventListener('drop', drop);
             events.emit('end')//发布end
         }
         return {

@@ -27,7 +27,6 @@ export function useCommand(data) {
             }
             queue.push({redo, undo});//保存指令前进与后腿
             state.current = current + 1;
-            console.log('queue: ', queue);
         }
     }
     // 注册我们需要的命令
@@ -37,7 +36,6 @@ export function useCommand(data) {
         execute:()=>{
             return{
                 redo(){
-                    console.log('重做');//回到撤销前
                     let item = state.queue[state.current +1];//找到当前的上一步还原操作
                     if(item){
                         item.redo && item.redo();
@@ -53,7 +51,6 @@ export function useCommand(data) {
         execute:()=>{
             return{
                 redo(){
-                    console.log('撤销state.current',state.current);
                     if(state.current == -1)return;
                     let item = state.queue[state.current];
                     if(item){
@@ -72,7 +69,6 @@ export function useCommand(data) {
             // 监控鼠标拖拽开始事件，保存状态
             const start = ()=> {
                 this.before = cloneDeep(data.value.blocks);
-                console.log('this.before: ', this.before);
             };
             // 拖拽之后需要出发相对应的指令
             const end = ()=> {

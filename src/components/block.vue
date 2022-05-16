@@ -6,8 +6,6 @@
 
 <script>
 import { onMounted, ref, reactive, nextTick } from 'vue'
-import { events } from "../packages/events";
-import { cloneDeep } from "lodash";
 export default {
   name:'DBlock',
   props:{
@@ -35,9 +33,9 @@ export default {
 
 <style lang="scss">
 .DBlock{
-    // width: 100%;
-    border: 2px dashed var(--el-border-color-base);
+    border: 1px dotted #aaa;
     min-height: 100px;
-    box-sizing: border-box;
+    box-sizing: border-box;//包含内边距和边框
+    padding: 10px;
 }
 </style>

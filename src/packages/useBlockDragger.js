@@ -12,7 +12,6 @@ export function useBlockDraggers(focusData, lastSelectBlock, data) {
         y: null
     })
     const mousedown = (e)=>{
-        console.log('111',lastSelectBlock.value);
         const {width:Bwidth, height:Bheight } = lastSelectBlock.value;//b是选中的无聊
         // clientX：当鼠标事件发生时（不管是onclick，还是omousemove，onmouseover等），鼠标相对于浏览器（这里说的是浏览器的有效区域）x轴的位置；
         // clientY：当鼠标事件发生时，鼠标相对于浏览器（这里说的是浏览器的有效区域）y轴的位置；

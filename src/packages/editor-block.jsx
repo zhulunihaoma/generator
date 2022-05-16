@@ -1,5 +1,6 @@
 import { defineComponent, computed, inject, onMounted, ref } from 'vue';
 import { ElButton } from "element-plus";
+import { registerLayoutConfig, registerBasicConfig, registerFieldConfig } from '../utils/editor-config'
 export default defineComponent({
     props:{
         block:{
@@ -17,6 +18,12 @@ export default defineComponent({
     },
     setup(props, ctx){
         const blockRef = ref(null);
+        // 所有组件的配置
+        const componentConfig = {
+            ...registerLayoutConfig.componentMap,
+            ...registerBasicConfig.componentMap,
+            ...registerFieldConfig.componentMap
+        }
         onMounted(()=>{
             let {offsetWidth, offsetHeight } = blockRef.value;
             if(props.block.alignCenter){//手动拖拽的时候才居中渲染，其他的默认渲染到界面上的内容不需要居中
@@ -59,13 +66,11 @@ export default defineComponent({
             positionDiv.style.left = currentComponent.offsetLeft + "px";
             positionDiv.style.width = currentComponent.offsetWidth + "px";
             positionDiv.style.height = (currentComponent.offsetHeight) + "px";
-            console.log('componentId: ', currentComponent);
+            // console.log('componentId: ', currentComponent);
         //    e.target.parentNode.classList.add('editor-block-focus');
             e.stopPropagation();
             // ctx.emit('inComponentMouseDown', e, block, index)
        }
-        const config = inject('config');
-
         // 组装出一个 嵌套的block 外面要套一层div 优化
        const renderSubBlock  = (blocks)=>{
             return  blocks.map((block, index)=>{
@@ -73,13 +78,13 @@ export default defineComponent({
             })
         }
         const renderBlock = (block)=>{
-            const component = config.componentMap[block.key];
+            const component = componentConfig[block.key];
             const slotComponents = [];
             if(block.blocks && block.blocks.length){
-                const ComponentRender = component.render(block, renderSubBlock(block.blocks), props.currentComponent, updateDataItem);
+                const ComponentRender = component.render(block, renderSubBlock(block.blocks), props.currentComponent);
                 return ComponentRender;
             }else{
-                const ComponentRender = component.render(block, slotComponents, props.currentComponent, updateDataItem);
+                const ComponentRender = component.render(block, slotComponents, props.currentComponent);
                 return ComponentRender;
             }
         }

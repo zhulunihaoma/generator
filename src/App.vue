@@ -10,13 +10,16 @@
 import { provide, ref } from 'vue';
 import Editor from './packages/editor'
 import data from "./data.json";
-import { registerConfig as config} from './utils/editor-config'
+import { registerConfig as config} from './utils/editor-config';
+import { CanvasData } from './types/component'
+// console.log('CanvasData: ', CanvasData);
 export default {
   components:{
     Editor
   },
   setup(){
-    const state = ref(data);
+    const state = ref(data)
+    console.log('state: ', state);
     provide('config', config);
     return {
       state
@@ -28,9 +31,9 @@ export default {
 <style lang="scss">
 #app{
   position: fixed;
-  left: 20px;
-  right: 20px;
-  top: 20px;
-  bottom: 20px;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
 }
 </style>
