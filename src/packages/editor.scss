@@ -135,6 +135,7 @@ background-color: #bbc5d5;
         background: rgb(242, 243, 244);
         box-shadow: rgb(221 221 221) 0px 0px 5px;
         font-size: 12px;
+
     }
     &-top{
         // right: 340px;
@@ -215,6 +216,9 @@ background-color: #bbc5d5;
                 // height: 550px;
                 padding: 20px auto;
                 // background-color: yellow;
+                .el-tabs__content{
+                    position: static;
+                }
             }
         }
     }
@@ -229,7 +233,7 @@ background-color: #bbc5d5;
     //     right: 0;
     //     bottom: 0;
     // }
-    padding: 10px;
+    margin: 10px;
 }
 // .editor-block-focus::after{
 //     content: '';
@@ -252,11 +256,17 @@ background-color: #bbc5d5;
 #editor-block-focus{
     position:absolute;
 	top:50px;
-	width:800px;
-	height:300px;
     border: 1px solid rgb(70, 128, 255);
-	filter:alpha(Opacity=80);-moz-opacity:0.2;opacity: 0.8;z-index:100; background-color:#fff;
+    z-index:100;
 	display:none;
+    .editor-block-focus-box{
+        filter:alpha(Opacity=80);
+        -moz-opacity:0;
+        opacity: 0;
+        // width:800px;
+	    // height:300px;
+        background-color:#fff;
+    }
     .editor-block-focus-tools{
         position: absolute;
         top: -35px;
@@ -291,7 +301,7 @@ background-color: #bbc5d5;
 }
 // 右侧设置样式
 .setting-block{
-    // padding: 16px;
+    padding: 10px;
     background: rgb(242, 242, 242);
     .el-collapse-item__header, .el-collapse-item__wrap {
         background: #f2f3f4;
@@ -301,5 +311,26 @@ background-color: #bbc5d5;
     }
     .el-collapse-item__header{
         font-weight: 500;
+    }
+    &-header{
+        padding: 12px 10px;
+        background: #e9e9e9;
+        &-titleIcon{
+            font-weight: 800;
+            font-size: 14px;
+            margin-left: 4px;
+            color: #333333;
+        }
+    }
+    &-content{
+        margin-top: 15px;
+        .el-form-item__label{
+            color: #666666;
+            font-size: 15px;
+        }
+        .el-collapse-item__header{
+            font-size: 16px;
+            font-weight: bold;
+        }
     }
 }

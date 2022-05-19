@@ -1,5 +1,6 @@
 import { defineComponent, ref, onMounted } from "vue";
 import { useCommand } from "../../packages/useCommand.js";
+import { events } from '../events'
 export default defineComponent({
   name: "Header",
   props:{
@@ -7,7 +8,7 @@ export default defineComponent({
             type:Object
         }
     },
-  setup(props) {
+  setup(props, ctx) {
     // const count = ref<number>(0);
 
     // const refCounter = ref<any>(null);
@@ -58,8 +59,12 @@ export default defineComponent({
         },
         {
             label:'清空',
-            icon:'xiayibu',
-            handle:()=> commands.redo()
+            icon:'qingkong',
+            handle:()=> {
+                events.emit('start')//发布start
+                ctx.emit('updateBlocks', [])
+                events.emit('end')//发布end
+            }
         },
         {
             label:'下一步',

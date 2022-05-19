@@ -11,9 +11,9 @@ export default defineComponent({
         ElCollapseItem
     },
     setup(props, ctx){
-        const elTabsType = ref<string | number>("component");
+        const elTabsType = ref("component");
         const activeNames = ref(['1'])
-        const handleChange = (val: string[]) => {
+        const handleChange = (val) => {
         }
         const input2 = ref('')
         return ()=>

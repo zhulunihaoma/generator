@@ -49,9 +49,6 @@ export default defineComponent({
                 }
             }
         })
-        const updateDataItem = (value)=>{
-            ctx.emit('updateDataItem', value)
-        }
        const inComponentMouseDown = (e, block, index)=>{
            const positionDiv = document.getElementById('editor-block-focus');
            ctx.emit('updateFocusComponent', {...block, index})
@@ -66,8 +63,6 @@ export default defineComponent({
             positionDiv.style.left = currentComponent.offsetLeft + "px";
             positionDiv.style.width = currentComponent.offsetWidth + "px";
             positionDiv.style.height = (currentComponent.offsetHeight) + "px";
-            // console.log('componentId: ', currentComponent);
-        //    e.target.parentNode.classList.add('editor-block-focus');
             e.stopPropagation();
             // ctx.emit('inComponentMouseDown', e, block, index)
        }

@@ -1,7 +1,9 @@
 {
-    "container": {
-        "width": 900,
+    "key": "container",
+    "attr":{
+        "width": 1080,
         "height": 1200,
+        "attr":{},
         "backgroundColor": "#fff",
         "position": "relative"
     },
@@ -9,6 +11,7 @@
     "blocks": [{
             "id": "12345",
             "parentId": "1",
+            "attr":{},
             "top": 300,
             "left": 300,
             "zIndex": 1,
@@ -18,8 +21,49 @@
             "position": "relative",
             "blocks": [
                 {
+                    "id": "12345666",
+                    "parentId": "12345",
+                    "attr":{
+                        "colNum":"1|1"
+                    },
+                    "top": 200,
+                    "left": 200,
+                    "zIndex": 1,
+                    "key": "colum",
+                    "name": "分栏",
+                    "belongsToCategory": "layout",
+                    "position": "relative",
+                    "blocks": [
+                        {
+                            "id": "123456777",
+                            "parentId": "12345666",
+                            "attr":{},
+                            "top": 200,
+                            "left": 200,
+                            "zIndex": 1,
+                            "key": "col",
+                            "name": "子分栏1",
+                            "belongsToCategory": "layout",
+                            "position": "relative"
+                        },
+                        {
+                            "id": "123456888",
+                            "parentId": "12345666",
+                            "attr":{},
+                            "top": 200,
+                            "left": 200,
+                            "zIndex": 1,
+                            "key": "col",
+                            "name": "子分栏2",
+                            "belongsToCategory": "layout",
+                            "position": "relative"
+                        }
+                    ]
+                },
+                {
                     "id": "123456",
                     "parentId": "12345",
+                    "attr":{},
                     "top": 200,
                     "left": 200,
                     "zIndex": 1,
@@ -31,6 +75,7 @@
                 {
                     "id": "1234567",
                     "parentId": "12345",
+                    "attr":{},
                     "top": 200,
                     "left": 200,
                     "zIndex": 1,
@@ -44,6 +89,7 @@
         {
             "id": "1234567890",
             "parentId": "1",
+            "attr":{},
             "top": 200,
             "left": 200,
             "zIndex": 1,

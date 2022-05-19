@@ -1,10 +1,13 @@
-import { defineComponent, computed, inject, onMounted, ref } from 'vue';
+import { defineComponent, computed, inject, onMounted, ref, watch, reactive } from 'vue';
 import {ElForm, ElFormItem, ElInput, ElCollapse, ElCollapseItem, ElSelect, ElOption, ElColorPicker, ElSlider, ElTabs, ElTabPane, } from 'element-plus'
 import '../editor.scss';
+import { registerLayoutConfig, registerBasicConfig, registerFieldConfig } from '../../utils/editor-config'
 import { cloneDeep } from "lodash";
+import { ComponentAttr } from '../../components/attrComponents/ComponentAttr';
+import { setDefaultColumBlocks } from '../../utils/componentsOperate';
 export default defineComponent({
     props:{
-        blockData: {
+        focusComponent: {
             type:Object
         },
         container: {
@@ -15,15 +18,24 @@ export default defineComponent({
         ElForm, ElFormItem, ElInput, ElTabs, ElTabPane,
     },
     setup(props, ctx){
-        const data = computed({
+        const focusComponent = computed({
             get(){
-                return props.blockData || {top:0};
+                return props.focusComponent || {};
             },
             set(newValue){
+                console.log('newValue====: ', newValue);
                 ctx.emit('updateDataItem',cloneDeep(newValue));
-                // ctx.emit('update:blockData', cloneDeep(newValue));
+                // ctx.emit('update:componentData', cloneDeep(newValue));
             }
         });
+        const componentConfig = reactive({
+                    config:{
+                        ...registerLayoutConfig.componentMap,
+                        ...registerBasicConfig.componentMap,
+                        ...registerFieldConfig.componentMap
+                    }
+                }
+        )
         onMounted(()=>{
 
         })
@@ -43,7 +55,7 @@ export default defineComponent({
             'hsla(209, 100%, 56%, 0.73)',
             '#c7158577',
           ]);
-        const elTabsType = ref("component");
+        const elTabsType = ref("attributes");
         const activeNames = ref([]);
         const container = props.container;
         const handleChange = (val)=>{
@@ -55,50 +67,54 @@ export default defineComponent({
         const ChangeSetting = (val,key)=>{
             data.value = {...data.value,[key]:val};
         }
+        const UpdateAttr = (attr)=>{
+            console.log('attr: ', attr);
+            focusComponent.value.attr = attr;
+            // debugger;
+            if(focusComponent.value.key === 'colum'){
+                const { colNum } = attr;
+                const colNumList = colNum.split('|');
+                const offset = colNumList.length - focusComponent.value.blocks.length;
+                if(offset > 0){
+                    console.log('offset: ', offset);
+                    let data = cloneDeep(focusComponent.value)
+                    const insertBlocks = setDefaultColumBlocks(focusComponent.value.id , offset);
+                    console.log('setDefaultColumBlocks===: ', setDefaultColumBlocks(focusComponent.value.id , offset));
+                    data.blocks = [...data.blocks, ...insertBlocks,];
+                    console.log('data.blocks: ', data.blocks);
+                    focusComponent.value = data;
+                }else{
+                    focusComponent.value.blocks.splice(Math.abs(offset),1);
+                }
+
+            }
+        }
         return ()=>{
             return <div class="setting-block">
-                 <ElTabs stretch={true} modelValue={elTabsType} class="demo-tabs">
+                <div className="setting-block-header">
+                    <div className="setting-block-header-titleIcon">
+                        {focusComponent.value.name || '全局视图'}
+                    </div>
+                </div>
+                <div className="setting-block-content">
+                    <ElTabs stretch={true} modelValue={elTabsType} class="demo-tabs">
                     <ElTabPane label="属性" name="attributes">
-                        <ElCollapse modelValue={activeNames} onChange={(val)=>{handleChange(val)}}>
-                            <ElCollapseItem title="页面属性" name="1">
-                                <div>
-                                <ElForm ref="formRef"  label-width="60px" label-position="top">
-                                    <ElFormItem label="布局方式">
-                                    <ElSelect onChange={(val)=>{ChangeContainerPosition({key:'position', val})}} modelValue={container.position} placeholder="please select your zone">
-                                        <ElOption label="固定布局" value="absolute"></ElOption>
-                                        <ElOption label="自适应布局" value="relative"></ElOption>
-                                    </ElSelect>
-                                    </ElFormItem>
-                                    <ElFormItem label="背景色">
-                                        <ElColorPicker onChange={(val)=>{ChangeContainerPosition({key:'backgroundColor', val})}} modelValue={container.backgroundColor} show-alpha predefine={predefineColors.value} />
-                                    </ElFormItem>
-                                    <ElFormItem label="宽">
-                                        <ElSlider max={900} onInput={(val)=>{ChangeContainerPosition({key:'width', val})}} modelValue={container.width} show-input/>
-                                    </ElFormItem>
-                                    <ElFormItem label="高">
-                                        <ElSlider max={900} onInput={(val)=>{ChangeContainerPosition({key:'height', val})}} modelValue={container.height} show-input/>
-                                    </ElFormItem>
-
-
-                                </ElForm>
-                                </div>
-                            </ElCollapseItem>
-                            <ElCollapseItem title="组件属性" name="2">
-                                <div>
-                                <ElForm ref="formRef"  label-width="60px" label-position="top">
-                                    <ElFormItem label="top">
-                                    <ElInput modelValue={data.value.top} onInput={(val)=>{ChangeSetting(val, 'top')}}></ElInput>
-                                    </ElFormItem>
-                                    <ElFormItem label="left">
-                                    <ElInput modelValue={data.value.left} onInput={(val)=>{ChangeSetting(val, 'left')}}></ElInput>
-                                    </ElFormItem>
-                                </ElForm>
-                                </div>
-                            </ElCollapseItem>
-                        </ElCollapse>
+                    <el-form
+                        label-position="top"
+                        label-width="100px"
+                        modelValue={focusComponent.value.attr}
+                        style="max-width: 460px"
+                    >
+                        {
+                          focusComponent.value.key && ComponentAttr[focusComponent.value.key](focusComponent, UpdateAttr)
+                        }
+                        {ComponentAttr['common'](focusComponent, UpdateAttr)}
+                    </el-form>
                     </ElTabPane>
                     <ElTabPane label="事件" name="events"></ElTabPane>
                 </ElTabs>
+
+                </div>
 
             </div>
         }

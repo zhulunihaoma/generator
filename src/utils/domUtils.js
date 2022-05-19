@@ -48,8 +48,10 @@ export const findParentBlockDom = (dom)=>{
 export const dragenterCommonds = ({e})=>{
     if (BlockComponentsClass.indexOf(e.target.className) > -1) {
         // 如果拖拽到最外层画布
+        positionDiv.removeAttribute('offset')
+        positionDiv.removeAttribute('positionLineId')
+        positionDiv.removeAttribute('offsetId')
         positionDiv.setAttribute('positionLineId',e.target.parentNode.id);
-        // positionDiv && positionDiv.remove();
         e.target.appendChild(positionDiv);
     }
 }
@@ -75,11 +77,41 @@ export const dragoverCommonds = ({e})=>{
         positionDiv.setAttribute('positionLineId',parentBlockDom.parentNode.id);
         positionDiv.setAttribute('offsetId',selfComponentDom.parentNode.id);
         // debugger;
-        if(elementOffset > 0){
-            insertAfter(positionDiv, selfComponentDom);
-        }else{//否则在前面添加
-            parentBlockDom.insertBefore(positionDiv, selfComponentDom.parentNode);
+        const options = {
+            // 动画执行次数
+            iterations: 1,
+            // 动画开始时间点
+            iterationStart: 0,
+            // 动画开始之前的延迟
+            delay: 0,
+            // 动画结束之后的延迟
+            endDelay: 0,
+            // 动画是否在下一周期逆向播放
+            direction: 'alternate',
+            // 动画时长
+            duration: 500,
+            // 动画前后保持的状态
+            fill: 'forwards',
+            // 动画缓动类型
+            easing: 'ease-in-out',
         }
+        // const keyframes = [
+        //     { opacity: 1 },
+        //     { opacity: 0.7, offset: 0.1 },
+            // { opacity: 0.3, offset: 0.4 },
+            // { opacity: 0.7, offset: 0.7 },
+        //     { opacity: 1 },
+        // ]
+            const keyframes ={
+                transform: ['translate(0, 0)', `translate(${3}px, ${3}px)`,`translate(${5}px, ${5}px)`]
+            }
+            const webAnimation = positionDiv.animate(keyframes, options);
+            if(elementOffset > 0){
+                insertAfter(positionDiv, selfComponentDom);
+            }else{//否则在前面添加
+                parentBlockDom.insertBefore(positionDiv, selfComponentDom.parentNode);
+            }
+
     }else{
 
     }

@@ -1,4 +1,4 @@
-import { computed, defineComponent, inject, ref, reactive, onMounted} from "vue";
+import { computed, defineComponent, inject, ref, reactive, onMounted, watch, toRefs} from "vue";
 import {
     CopyDocument,
     Delete
@@ -14,9 +14,9 @@ import { cloneDeep } from 'loadsh'
 import { useMenuDragger } from './useMenuDragger';
 import { useFocus } from './useFocus'
 import { useBlockDraggers } from "./useBlockDragger";
-import { componentDragger } from "./componentDragger"
 import { useCommand } from "./useCommand";
 import { events } from "./events";
+import { removeBlock, copyBlock, updateComponent } from '../utils/componentsOperate'
 const imgsrc = require('../assets/images/pikachu.png');
 
 export default defineComponent({
@@ -37,17 +37,17 @@ export default defineComponent({
                 return props.modelValue;
             },
             set(newValue){
-                if(!newValue.container){
-                    newValue.container = props.modelValue.container;
+                if(!newValue.attr){
+                    newValue.attr = props.modelValue.attr;
                 }
                 ctx.emit('update:modelValue', cloneDeep(newValue));
             }
         });
         const containerStyles = computed(() => {
             const styles = {
-                width: data.value.container.width + 'px',
-                height: data.value.container.height + 'px',
-                backgroundColor: data.value.container.backgroundColor
+                width: data.value.attr.width + 'px',
+                height: data.value.attr.height + 'px',
+                backgroundColor: data.value.attr.backgroundColor
             }
             return styles;
         })
@@ -56,12 +56,16 @@ export default defineComponent({
         const {dragstart, dragend, currentComponent} = useMenuDragger(containerRef, data);
 
         // 2：实现获取焦点
+         // 选中的组件
+         let focusComponent = reactive({
+                componentData:{}
+            })
         const {
             blockMouseDown,
             focusData,
             containerMousedown,
             lastSelectBlock
-        } = useFocus(data,(e)=>{
+        } = useFocus(data,focusComponent,(e)=>{
             mousedown(e);
         });
         const computeComponent = computed(() => {
@@ -73,45 +77,46 @@ export default defineComponent({
         // 更新属性
         const updateDataItem = (val)=>{
             const dataList = cloneDeep(data.value);
-            dataList.blocks.forEach(block=>{
-                if(block.id === val.id){
-                    block.top = val.top;
-                    block.left = val.left;
-                    block.blocks = val.blocks;
-                    // block = {...block, ...val};
-                }
-            })
-            data.value = dataList;
+            // 递归查找然后替换
+            debugger;
+            updateComponent(data.value, val)
+            // data.value = dataList;
         }
         // 更新container
         const updateContainer = ({key, val})=>{
-            data.value.container[key] = val;
+            data.value.attr[key] = val;
         }
-        // onMounted(()=>{
-        //     window.document.addEventListener('onMousedown',(e)=>{
-        //         debugger;
-        //         console.log('onMousedown>>>>>>e: ', e);
-        //     })
-        // })
+         // 更新(清空画布)data.Block
+         const updateBlocks = (val)=>{
+            data.value.blocks = val;
+        }
         // 已有组件的拖拽
         const focusMouseDown = (e)=>{
             e.stopPropagation();
         }
-        // 选中的组件
-        let focusComponent = reactive();
 
         const updateFocusComponent =(component)=>{
-            focusComponent = component;
+            focusComponent.componentData = component
         }
-
-        // 渲染布局组件
+        // 操作组件
+        const copyComponent = ()=>{
+            copyBlock()(data.value, focusComponent.componentData)
+            const positionDiv = document.getElementById('editor-block-focus');
+            positionDiv.style.display = "none";
+        }
+        const deleteComponent = ()=>{
+            removeBlock()(data.value, focusComponent.componentData)
+            const positionDiv = document.getElementById('editor-block-focus');
+            positionDiv.style.display = "none";
+        }
+        //
+        // 渲染布局组件updateComponent
         const renderBlock = (data)=>{
               return  (data.blocks.map((block, index)=>{
                   return <EditorBlock
-                            onUpdateDataItem= {updateDataItem}
                             onUpdateFocusComponent = {updateFocusComponent}
                             currentComponent={computeComponent}
-                            block={block} container={data.container}
+                            block={block} container={data.attr}
                             class={block.focus ? 'editor-block-focus' : ''}
                             // OnInComponentMouseDown={inComponentMouseDown}
                             index={index}
@@ -124,9 +129,9 @@ export default defineComponent({
         }
         return ()=> <div class="editor">
             <Left onComponentDragstart={dragstart} onComponentDragend={dragend}></Left>
-            <Header data={data}></Header>
+            <Header onUpdateBlocks={updateBlocks} data={data}></Header>
             <div class="editor-right">
-                <SettingBlock blockData={lastSelectBlock.value} container={data.value.container} onUpdateDataItem={updateDataItem} onUpdateContainer={updateContainer}></SettingBlock>
+                <SettingBlock focusComponent={focusComponent.componentData} container={data.value.attr} onUpdateDataItem={updateDataItem} onUpdateContainer={updateContainer}></SettingBlock>
             </div>
             <div class="editor-container">
                 {/* {负责产生滚动条} */}
@@ -134,10 +139,11 @@ export default defineComponent({
                 {/* {产生内容区域} */}
                     <div className="editor-block" id="1">
                         <div className="editor-container-canvas__content" onMousedown={containerMousedown} style={containerStyles.value} ref={containerRef}>
-                            <div onMousedown={focusMouseDown} draggable onDragstart={e=>dragstart({e, component: focusComponent})} onDragend={dragend} className="editor-block-focus" id="editor-block-focus">
+                            <div onMousedown={focusMouseDown} draggable onDragstart={e=>dragstart({e, component: focusComponent.componentData})} onDragend={dragend} className="editor-block-focus" id="editor-block-focus">
+                                <div className="editor-block-focus-box"></div>
                                 <div className="editor-block-focus-tools">
-                                    <ElButton type="primary" icon={CopyDocument} circle />
-                                    <ElButton type="primary" icon={Delete} circle />
+                                    <ElButton type="primary" icon={CopyDocument} onClick={copyComponent} circle />
+                                    <ElButton type="primary" icon={Delete} onClick={deleteComponent} circle />
                                 </div>
                             </div>
                             {renderBlock(data.value)}

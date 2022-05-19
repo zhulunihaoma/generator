@@ -1,5 +1,5 @@
 import { computed, ref } from "vue";
-export function useFocus(data, callback) {
+export function useFocus(data, focusComponent,callback) {
     const selectIndex = ref(-1);//最后一个选中的画布内的物料
     const lastSelectBlock = computed(()=>{
        return data.value.blocks[selectIndex.value];
@@ -7,6 +7,7 @@ export function useFocus(data, callback) {
     const clearBlockFocus = ()=>{
         const positionDiv = document.getElementById('editor-block-focus');
         positionDiv.style.display = 'none';
+        focusComponent.componentData = data.value;
         data.value.blocks.forEach(block=>{
             block.focus = false;
         })

@@ -94,6 +94,27 @@ export function useCommand(data) {
             }
         }
     });
+     // 注册我们需要的命令
+    //  registry({
+    //     name:'clear',
+    //     keyboard:'contrl+k',
+    //     execute:()=>{
+    //         return{
+    //             clear(){
+    //                 data.value = {
+    //                             "container": {
+    //                                 "width": 900,
+    //                                 "height": 1200,
+    //                                 "backgroundColor": "#fff",
+    //                                 "position": "relative"
+    //                             },
+    //                                 "id":"1",
+    //                                 "blocks":[]
+    //                     }
+    //             }
+    //         }
+    //     }
+    // })
     const keyboardEvent = (()=>{
         const keyCodes ={
             90: 'z',

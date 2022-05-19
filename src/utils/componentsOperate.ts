@@ -1,9 +1,11 @@
 
-import { NeedsColComponent } from '../utils/editor-config.jsx'
-const setDefaultColumBlocks = (parentId, key)=>{
-    let blocks = [
-        {
-            id: (Date.parse(new Date())+ 1).toString(),
+import { NeedsColComponent } from '../utils/editor-config.jsx';
+import { cloneDeep } from 'loadsh';
+export const setDefaultColumBlocks = (parentId, num)=>{
+    let blocks = []
+    for(let i = 0; i< num; i++){
+        blocks.push({
+            id: (Date.parse(new Date())+ i).toString(),
             parentId: parentId,
             top: 0,
             left: 0,
@@ -11,18 +13,9 @@ const setDefaultColumBlocks = (parentId, key)=>{
             key: 'col',
             blocks:[],
             alignCenter: true //松手的时候 居中
-        },{
-            id: (Date.parse(new Date()) + 2).toString(),
-            parentId: parentId,
-            top: 0,
-            left: 0,
-            zIndex: 1,
-            key: 'col',
-            blocks:[],
-            alignCenter: true //松手的时候 居中
-        }
-    ]
-    return key === 'colum' ? blocks : [blocks[0]]
+        })
+    }
+    return blocks;
 }
 /**
  * 在布局组件中插入组件
@@ -45,6 +38,7 @@ export const insertComponentToBlock = (block, e, currentComponent, positionDiv)=
     }
     if(blockId === '1' || (blockId + '' === block.id + '')){
         newId = Date.parse(new Date()).toString();
+        if(!block.blocks) block.blocks  = [];
         if(offset){
             const offsetIndex = offset > 0 ? findIndex(block.blocks, offsetId) + 1 : findIndex(block.blocks, offsetId);
             // console.log('findIndex: ', block.blocks, offsetId, findIndex(block.blocks, offsetId));
@@ -56,7 +50,7 @@ export const insertComponentToBlock = (block, e, currentComponent, positionDiv)=
                 left: 0,
                 zIndex: 1,
                 key: currentComponent.key,
-                blocks:NeedsColComponent.includes(currentComponent.key) ? setDefaultColumBlocks(newId, currentComponent.key) : [],
+                blocks:NeedsColComponent.includes(currentComponent.key) ? setDefaultColumBlocks(newId, currentComponent.key === 'colum' ? 2: 1) : [],
                 alignCenter: true //松手的时候 居中
             });
         }else{
@@ -67,7 +61,7 @@ export const insertComponentToBlock = (block, e, currentComponent, positionDiv)=
                 left: 0,
                 zIndex: 1,
                 key: currentComponent.key,
-                blocks:NeedsColComponent.includes(currentComponent.key) ? setDefaultColumBlocks(newId, currentComponent.key) : [],
+                blocks:NeedsColComponent.includes(currentComponent.key) ? setDefaultColumBlocks(newId, currentComponent.key === 'colum' ? 2: 1) : [],
                 alignCenter: true //松手的时候 居中
             })
         }
@@ -101,7 +95,11 @@ export const getParentBlockId = (componentId:string,block)=>{
         }
     })
 }
-const removeBlock = ()=>{
+/**
+ *
+ * @returns 删除一个组件
+ */
+export const removeBlock = ()=>{
     let findFlag = 0;
      const removeSub = (block, component)=>{
         block.blocks && block.blocks.forEach((subBlock)=>{
@@ -109,13 +107,37 @@ const removeBlock = ()=>{
                 block.blocks.splice(component.index, 1);
                 findFlag ++;
                 return;
-                console.log('findFlag: ', findFlag);
             }else if(subBlock.blocks &&  subBlock.blocks.length && findFlag === 0){
                 removeSub(subBlock, component)
             }
         })
     }
     return removeSub;
+}
+export const copyBlock = ()=>{
+    let findFlag = 0;
+     const removeSub = (block, component)=>{
+        block.blocks && block.blocks.forEach((subBlock)=>{
+            if(subBlock.id === component.id){
+                block.blocks.splice(component.index+1, 0, updateComponentId(cloneDeep(component)));
+                findFlag ++;
+                return;
+            }else if(subBlock.blocks &&  subBlock.blocks.length && findFlag === 0){
+                removeSub(subBlock, component)
+            }
+        })
+    }
+    return removeSub;
+}
+
+const updateComponentId = (component)=>{
+    component.id = component.id + (new Date().getTime()+ 1).toString();
+    component.blocks && component.blocks.forEach((data, index) => {
+        if(data.blocks){
+            updateComponentId(data);
+        }
+    });
+    return component;
 }
 /**
  *  删除一个组件，在另一个地方插入
@@ -136,4 +158,18 @@ export const exchangeBlock = (block, newBlockId:string, removeBlockId, component
             exchangeBlock(subBlock, newBlockId, removeBlockId, component)
         }
     })
+}
+/**
+ * 更新属性
+ */
+export const updateComponent = (data,component)=>{
+    if(data.id === component.id){
+        data.attr = component.attr;
+        if(component.key === 'colum'){
+            data.blocks = component.blocks;
+        }
+    }
+    data.blocks && data.blocks.forEach(subData => {
+        updateComponent(subData, component);
+    });
 }

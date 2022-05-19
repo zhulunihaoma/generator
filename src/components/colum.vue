@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { onMounted, ref, reactive, nextTick, computed } from 'vue'
+import { onMounted, ref, reactive, computed } from 'vue'
 import { cloneDeep } from "lodash";
 import Col from './col.vue'
 export default {
@@ -26,9 +26,54 @@ export default {
   },
   setup(props, ctx){
         const columNum = ref(2);
+        const colums = reactive([
+            {
+                key:'1',
+                value:'1',
+                display:'1fr'
+            },
+            {
+                key:'1|1',
+                value:'1|1',
+                display:'1fr 1fr'
+            },
+            {
+                key:'1|1|1',
+                value:'1|1|1',
+                display:'1fr 1fr 1fr'
+            },
+            {
+                key:'1|1|1|1',
+                value:'1|1|1|1',
+                display:'1fr 1fr 1fr 1fr'
+            },
+            {
+                key:'1|3',
+                value:'1|3',
+                display:'1fr 3fr'
+            },
+            {
+                key:'3|1',
+                value:'3|1',
+                display:'3fr 1fr'
+            },
+            {
+                key:'1|2|1',
+                value:'1|2|1',
+                display:'1fr 2fr 1fr'
+            },
+            {
+                key:'1|1|2',
+                value:'1|1|2',
+                display:'1fr 1fr 2fr'
+            },
+        ])
         const gridStyle = computed(()=>{
+            const display = colums.find(option=>{
+               return option.value === props.block.attr.colNum;
+            }).display
             const styles = {
-                gridTemplateColumns: '1fr 1fr',
+                gridTemplateColumns: display,
 
             }
             return styles;
