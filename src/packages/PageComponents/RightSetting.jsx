@@ -20,7 +20,7 @@ export default defineComponent({
     setup(props, ctx){
         const focusComponent = computed({
             get(){
-                return props.focusComponent || {};
+                return props.focusComponent || props.container;
             },
             set(newValue){
                 console.log('newValue====: ', newValue);
@@ -68,20 +68,18 @@ export default defineComponent({
             data.value = {...data.value,[key]:val};
         }
         const UpdateAttr = (attr)=>{
-            console.log('attr: ', attr);
-            focusComponent.value.attr = attr;
+            let focusComponentData = cloneDeep(focusComponent.value)
+            focusComponentData.attr = attr;
+            focusComponent.value = focusComponentData;
             // debugger;
             if(focusComponent.value.key === 'colum'){
                 const { colNum } = attr;
                 const colNumList = colNum.split('|');
                 const offset = colNumList.length - focusComponent.value.blocks.length;
                 if(offset > 0){
-                    console.log('offset: ', offset);
                     let data = cloneDeep(focusComponent.value)
                     const insertBlocks = setDefaultColumBlocks(focusComponent.value.id , offset);
-                    console.log('setDefaultColumBlocks===: ', setDefaultColumBlocks(focusComponent.value.id , offset));
                     data.blocks = [...data.blocks, ...insertBlocks,];
-                    console.log('data.blocks: ', data.blocks);
                     focusComponent.value = data;
                 }else{
                     focusComponent.value.blocks.splice(Math.abs(offset),1);
@@ -106,9 +104,9 @@ export default defineComponent({
                         style="max-width: 460px"
                     >
                         {
-                          focusComponent.value.key && ComponentAttr[focusComponent.value.key](focusComponent, UpdateAttr)
+                          focusComponent.value.key && ComponentAttr[focusComponent.value.key](focusComponent.value, UpdateAttr)
                         }
-                        {ComponentAttr['common'](focusComponent, UpdateAttr)}
+                        {ComponentAttr['common'](focusComponent.value, UpdateAttr)}
                     </el-form>
                     </ElTabPane>
                     <ElTabPane label="事件" name="events"></ElTabPane>

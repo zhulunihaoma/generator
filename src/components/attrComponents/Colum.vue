@@ -67,6 +67,7 @@ const colums = reactive([
         display:[1,1,2]
     },
 ])
+
 const selectColNum = ref('1|1');
 //1、暴露内部数据
 const emits = defineEmits(['UpdateAttr']);

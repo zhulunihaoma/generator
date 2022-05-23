@@ -1,17 +1,22 @@
 {
     "key": "container",
     "attr":{
-        "width": 1080,
-        "height": 1200,
-        "attr":{},
-        "backgroundColor": "#fff",
-        "position": "relative"
+        "componentStyle":{
+            "position": "relative",
+            "width": "calc(100% - 20px)",
+            "height": 1200,
+            "backgroundColor": "#ffffff"
+        }
     },
     "id":"1",
     "blocks": [{
             "id": "12345",
             "parentId": "1",
-            "attr":{},
+            "attr":{
+                "componentStyle":{
+                    "backgroundColor": "#ffffff"
+                }
+            },
             "top": 300,
             "left": 300,
             "zIndex": 1,
@@ -24,7 +29,10 @@
                     "id": "12345666",
                     "parentId": "12345",
                     "attr":{
-                        "colNum":"1|1"
+                        "colNum":"1|1",
+                        "componentStyle":{
+                            "backgroundColor": "#ffffff"
+                        }
                     },
                     "top": 200,
                     "left": 200,
@@ -37,7 +45,11 @@
                         {
                             "id": "123456777",
                             "parentId": "12345666",
-                            "attr":{},
+                            "attr":{
+                                "componentStyle":{
+                                    "backgroundColor": "#ffffff"
+                                }
+                            },
                             "top": 200,
                             "left": 200,
                             "zIndex": 1,
@@ -49,7 +61,11 @@
                         {
                             "id": "123456888",
                             "parentId": "12345666",
-                            "attr":{},
+                            "attr":{
+                                "componentStyle":{
+                                    "backgroundColor": "#ffffff"
+                                }
+                            },
                             "top": 200,
                             "left": 200,
                             "zIndex": 1,
@@ -63,7 +79,11 @@
                 {
                     "id": "123456",
                     "parentId": "12345",
-                    "attr":{},
+                    "attr":{
+                        "componentStyle":{
+                            "backgroundColor": "#ffffff"
+                        }
+                    },
                     "top": 200,
                     "left": 200,
                     "zIndex": 1,
@@ -75,7 +95,11 @@
                 {
                     "id": "1234567",
                     "parentId": "12345",
-                    "attr":{},
+                    "attr":{
+                        "componentStyle":{
+                            "backgroundColor": "#ffffff"
+                        }
+                    },
                     "top": 200,
                     "left": 200,
                     "zIndex": 1,
@@ -89,7 +113,11 @@
         {
             "id": "1234567890",
             "parentId": "1",
-            "attr":{},
+            "attr":{
+                "componentStyle":{
+                    "backgroundColor": "#ffffff"
+                }
+            },
             "top": 200,
             "left": 200,
             "zIndex": 1,

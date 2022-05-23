@@ -1,9 +1,12 @@
 <template>
-    <ElButton class="DButton">{{block && block.name || '按钮'}}</ElButton>
+  <div :style="componentStyle" class="DButton">
+        <ElButton class="DButton">{{block && block.name || '按钮'}}</ElButton>
+  </div>
 </template>
 
 <script>
-import { ElButton } from 'element-plus'
+import { ElButton } from 'element-plus';
+import { computed } from 'vue';
 export default {
   name:'DButton',
   components:{
@@ -16,7 +19,12 @@ export default {
       }
   },
   setup(props){
-    // console.log('props: ', props);
+    const componentStyle = computed(() => {
+            return props.block.attr?.componentStyle || "";
+        });
+    return {
+      componentStyle
+    }
 
   }
 }

@@ -1,7 +1,7 @@
 import Common from './Common.vue';
 import Colum from './Colum.vue';
 export const ComponentAttr = {
-    common: (focusComponent)=> <Common focusComponent={focusComponent}></Common>,
+    common: (focusComponent, UpdateAttr)=> <Common onUpdateAttr={UpdateAttr} focusComponent={focusComponent}></Common>,
     container: (focusComponent)=> <span>全局属性</span>,
     block: (focusComponent)=> <span></span>,
     colum: (focusComponent, UpdateAttr)=> <Colum onUpdateAttr={UpdateAttr} focusComponent={focusComponent}></Colum>,
@@ -17,4 +17,6 @@ export const ComponentAttr = {
     associatedapp:(focusComponent)=> <span focusComponent={focusComponent}></span>,
     input:(focusComponent)=> <span focusComponent={focusComponent}>输入框属性</span>,
     select:(focusComponent)=> <span focusComponent={focusComponent}>选择框属性</span>,
+    radio:(focusComponent)=> <span focusComponent={focusComponent}>单选属性</span>,
+    rate:(focusComponent)=> <span focusComponent={focusComponent}>评分属性</span>,
 }

@@ -68,13 +68,16 @@ export default {
                 display:'1fr 1fr 2fr'
             },
         ])
+        const componentStyle = computed(() => {
+            return props.block.attr?.componentStyle || "";
+        });
         const gridStyle = computed(()=>{
             const display = colums.find(option=>{
                return option.value === props.block.attr.colNum;
             }).display
             const styles = {
                 gridTemplateColumns: display,
-
+                ...componentStyle.value
             }
             return styles;
         })

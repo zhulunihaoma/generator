@@ -1,4 +1,4 @@
-import { ComponentsClass, BlockComponentsClass } from "./editor-config";
+import { ComponentsClass, ElementComponentsClass, BlockComponentsClass } from "./editor-config";
 import { insertComponentToContainer, insertComponentToBlock } from '../utils/componentsOperate'
 const positionDiv = document.createElement('div');
 positionDiv.id = "positionLine-stickyTop";
@@ -59,11 +59,15 @@ export const dragenterCommonds = ({e})=>{
  * dragover事件方法
  * @param {*} e
  */
+let position ={
+    x:0,
+    y:0,
+}
 export const dragoverCommonds = ({e})=>{
     // console.log('dragover: ', e.target.classList);
-    // 如果目标是非布局组件
-    if([...BlockComponentsClass, 'editor-block', 'editor-block-focus'].indexOf(e.target.classList[e.target.classList.length -1]) === -1 && e.target.id !== "positionLine-stickyTop"){
-        console.log('e.target.classList: ', e.target.classList);
+    // 如果目标是非布局组件h
+    if(ElementComponentsClass.indexOf(findSelfComponentDom(e.target).className) > -1 && e.target.id !== "positionLine-stickyTop"){
+        console.log('e.target.classList=====: ', e.target.classList);
         const offsetY =  e.offsetY;
         const elementOffset = offsetY - (e.target.parentNode.offsetHeight/2);
         // 偏移量大于0在后面添加
@@ -106,6 +110,8 @@ export const dragoverCommonds = ({e})=>{
                 transform: ['translate(0, 0)', `translate(${3}px, ${3}px)`,`translate(${5}px, ${5}px)`]
             }
             const webAnimation = positionDiv.animate(keyframes, options);
+            // position.x = positionDiv.offsetLeft;
+            // position.y = positionDiv.offsetTop;
             if(elementOffset > 0){
                 insertAfter(positionDiv, selfComponentDom);
             }else{//否则在前面添加

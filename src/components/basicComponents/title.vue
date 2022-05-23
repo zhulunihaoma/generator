@@ -1,5 +1,5 @@
 <template>
-    <div class="DTitle">
+    <div :style="componentStyle" class="DTitle">
         <div class="DTitle-content">
             <span class="DTitle-content-title">标题</span>
         </div>
@@ -10,6 +10,15 @@
 import {
     ArrowDown
   } from '@element-plus/icons-vue'
+  import { computed } from "vue";
+    const props = defineProps({
+        block: {
+          type: Object
+        }
+      });
+    const componentStyle = computed(() => {
+            return props.block.attr?.componentStyle || "";
+        });
 </script>
 
 <style lang="scss">

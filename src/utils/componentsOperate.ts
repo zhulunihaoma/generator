@@ -1,12 +1,18 @@
 
 import { NeedsColComponent } from '../utils/editor-config.jsx';
 import { cloneDeep } from 'loadsh';
+import { Component } from '../types/component'
 export const setDefaultColumBlocks = (parentId, num)=>{
     let blocks = []
-    for(let i = 0; i< num; i++){
+    for(let i = 1; i<= num; i++){
         blocks.push({
             id: (Date.parse(new Date())+ i).toString(),
             parentId: parentId,
+            attr:{
+                componentStyle:{
+                    backgroundColor: "#ffffff"
+                }
+            },
             top: 0,
             left: 0,
             zIndex: 1,
@@ -46,6 +52,12 @@ export const insertComponentToBlock = (block, e, currentComponent, positionDiv)=
             block.blocks.splice(offsetIndex, 0, currentComponent.id ? currentComponent : {
                 id: newId,
                 parentId: block.id,
+                attr:{
+                    colNum:"1|1",
+                    componentStyle:{
+                        backgroundColor: "#ffffff"
+                    }
+                },
                 top: e.offsetY,
                 left: 0,
                 zIndex: 1,
@@ -57,6 +69,12 @@ export const insertComponentToBlock = (block, e, currentComponent, positionDiv)=
             block.blocks.push(currentComponent.id ? currentComponent : {
                 id: newId,
                 parentId: block.id,
+                attr:{
+                    colNum:"1|1",
+                    componentStyle:{
+                        backgroundColor: "#ffffff"
+                    }
+                },
                 top: e.offsetY,
                 left: 0,
                 zIndex: 1,
@@ -101,7 +119,7 @@ export const getParentBlockId = (componentId:string,block)=>{
  */
 export const removeBlock = ()=>{
     let findFlag = 0;
-     const removeSub = (block, component)=>{
+     const removeSub = (block: Component, component: Component)=>{
         block.blocks && block.blocks.forEach((subBlock)=>{
             if(subBlock.id === component.id){
                 block.blocks.splice(component.index, 1);

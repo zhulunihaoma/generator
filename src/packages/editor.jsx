@@ -45,9 +45,9 @@ export default defineComponent({
         });
         const containerStyles = computed(() => {
             const styles = {
-                width: data.value.attr.width + 'px',
-                height: data.value.attr.height + 'px',
-                backgroundColor: data.value.attr.backgroundColor
+                width: data.value.attr.componentStyle.width,
+                height: data.value.attr.componentStyle.height + 'px',
+                backgroundColor: data.value.attr.componentStyle.backgroundColor
             }
             return styles;
         })
@@ -58,7 +58,7 @@ export default defineComponent({
         // 2：实现获取焦点
          // 选中的组件
          let focusComponent = reactive({
-                componentData:{}
+                componentData: null
             })
         const {
             blockMouseDown,
@@ -84,7 +84,7 @@ export default defineComponent({
         }
         // 更新container
         const updateContainer = ({key, val})=>{
-            data.value.attr[key] = val;
+            data.value.attr.componentStyle[key] = val;
         }
          // 更新(清空画布)data.Block
          const updateBlocks = (val)=>{
@@ -131,7 +131,7 @@ export default defineComponent({
             <Left onComponentDragstart={dragstart} onComponentDragend={dragend}></Left>
             <Header onUpdateBlocks={updateBlocks} data={data}></Header>
             <div class="editor-right">
-                <SettingBlock focusComponent={focusComponent.componentData} container={data.value.attr} onUpdateDataItem={updateDataItem} onUpdateContainer={updateContainer}></SettingBlock>
+                <SettingBlock focusComponent={focusComponent.componentData || data.value} container={data.value} onUpdateDataItem={updateDataItem} onUpdateContainer={updateContainer}></SettingBlock>
             </div>
             <div class="editor-container">
                 {/* {负责产生滚动条} */}

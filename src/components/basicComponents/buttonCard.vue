@@ -1,11 +1,12 @@
 <template>
-    <div class="DButtonCard"></div>
+    <div :style="componentStyle" class="DButtonCard"></div>
     <el-button class="DButtonCard-button">按钮1</el-button>
     <el-button class="DButtonCard-button">按钮2</el-button>
     <el-button class="DButtonCard-button">按钮3</el-button>
 </template>
 
 <script>
+import { computed } from 'vue';
 export default {
   name:'DButtonCard',
   props:{
@@ -15,8 +16,12 @@ export default {
       }
   },
   setup(props){
-    // console.log('props: ', props);
-
+    const componentStyle = computed(() => {
+            return props.block.attr?.componentStyle || "";
+        });
+    return {
+      componentStyle
+    }
   }
 }
 </script>

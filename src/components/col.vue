@@ -1,11 +1,19 @@
 <template>
-    <div class="DCol">
+    <div :style="componentStyle" class="DCol">
         <slot></slot>
     </div>
 </template>
 
 <script setup>
-
+import { computed } from "vue";
+    const props = defineProps({
+        block: {
+          type: Object
+        }
+      });
+    const componentStyle = computed(() => {
+            return props.block.attr?.componentStyle || "";
+        });
 </script>
 
 <style>

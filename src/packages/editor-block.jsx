@@ -76,10 +76,10 @@ export default defineComponent({
             const component = componentConfig[block.key];
             const slotComponents = [];
             if(block.blocks && block.blocks.length){
-                const ComponentRender = component.render(block, renderSubBlock(block.blocks), props.currentComponent);
+                const ComponentRender = component.render(block, renderSubBlock(block.blocks));
                 return ComponentRender;
             }else{
-                const ComponentRender = component.render(block, slotComponents, props.currentComponent);
+                const ComponentRender = component.render(block, slotComponents);
                 return ComponentRender;
             }
         }

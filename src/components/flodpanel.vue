@@ -1,5 +1,5 @@
 <template>
-    <div class="DFlodpanel">
+    <div :style="componentStyle" class="DFlodpanel">
         <div class="DFlodpanel-header">
             <span class="DFlodpanel-header-title">折叠面板</span>
             <el-icon><ArrowDown /></el-icon>
@@ -11,9 +11,16 @@
 </template>
 
 <script setup>
-import {
-    ArrowDown
-  } from '@element-plus/icons-vue'
+import { ArrowDown } from '@element-plus/icons-vue';
+import { computed } from "vue";
+    const props = defineProps({
+        block: {
+          type: Object
+        }
+      });
+   const componentStyle = computed(() => {
+            return props.block.attr?.componentStyle || "";
+        });
 </script>
 
 <style lang="scss">
